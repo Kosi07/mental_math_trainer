@@ -1,0 +1,21 @@
+@import 'tailwindcss';
+
+#container hr{
+    width: 5cm;
+}
+
+#container #answer{
+    width: 3cm;
+    height: 2cm;
+    border-radius: 0.5cm;
+    font-size: 1em;
+    text-align: center;
+    background-color: rgba(179, 171, 171, 0.089);
+}
+
+.btn #saveChangesBtn{
+    width: 6em;
+    height: 4em;
+    border-radius: 2em;
+    font-size: 1.3em;
+}
