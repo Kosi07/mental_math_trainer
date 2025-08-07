@@ -227,9 +227,6 @@ document.getElementById(`answer`).oninput = function(){
                 solution *= numArray[i];     //sum up the numbers
             };
         }
-        else if (operator == `^`){
-            console.log(`operator = ${operator}`);
-        }
         else if (operator == `?`){
             alert(`Please select an Operator from the dropdown menu.`);
         }

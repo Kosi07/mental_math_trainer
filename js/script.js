@@ -228,9 +228,6 @@ document.getElementById("answer").oninput = function () {
         }
         ;
     }
-    else if (operator == "^") {
-        console.log("operator = ".concat(operator));
-    }
     else if (operator == "?") {
         alert("Please select an Operator from the dropdown menu.");
     }
