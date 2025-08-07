@@ -255,14 +255,24 @@ document.getElementById(`saveChangesBtn`).onclick = function(){
 
 document.getElementById(`hamburger-icon`).onclick = function(){
     let sidebar = document.querySelector(`#sidebar`) as HTMLDivElement;
+    let settingsSidebar = document.querySelector(`#settings-sidebar`) as HTMLDivElement;
     sidebar.classList.toggle(`translate-x-0`);
     sidebar.classList.toggle(`-translate-x-full`);
+    if (settingsSidebar.classList.contains(`translate-x-0`)){ //If open, close it
+        settingsSidebar.classList.toggle(`translate-x-0`);
+        settingsSidebar.classList.toggle(`translate-x-full`);
+    }
 };
 
 document.getElementById(`settings-icon`).onclick = function(){
     let settingsSidebar = document.querySelector(`#settings-sidebar`) as HTMLDivElement;
+    let sidebar = document.querySelector(`#sidebar`) as HTMLDivElement;
     settingsSidebar.classList.toggle(`translate-x-0`);
     settingsSidebar.classList.toggle(`translate-x-full`);
+    if (sidebar.classList.contains(`translate-x-0`)){
+        sidebar.classList.toggle(`translate-x-0`);
+        sidebar.classList.toggle(`-translate-x-full`);
+    }
 };
 
 

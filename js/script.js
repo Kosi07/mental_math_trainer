@@ -252,11 +252,21 @@ document.getElementById("saveChangesBtn").onclick = function () {
 };
 document.getElementById("hamburger-icon").onclick = function () {
     var sidebar = document.querySelector("#sidebar");
+    var settingsSidebar = document.querySelector("#settings-sidebar");
     sidebar.classList.toggle("translate-x-0");
     sidebar.classList.toggle("-translate-x-full");
+    if (settingsSidebar.classList.contains("translate-x-0")) { //If open, close it
+        settingsSidebar.classList.toggle("translate-x-0");
+        settingsSidebar.classList.toggle("translate-x-full");
+    }
 };
 document.getElementById("settings-icon").onclick = function () {
     var settingsSidebar = document.querySelector("#settings-sidebar");
+    var sidebar = document.querySelector("#sidebar");
     settingsSidebar.classList.toggle("translate-x-0");
     settingsSidebar.classList.toggle("translate-x-full");
+    if (sidebar.classList.contains("translate-x-0")) {
+        sidebar.classList.toggle("translate-x-0");
+        sidebar.classList.toggle("-translate-x-full");
+    }
 };
