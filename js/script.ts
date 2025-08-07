@@ -1,5 +1,4 @@
 //Give better feedback
-//Figure out exponents
 console.log(`Mental Math Trainer is running...`); //For debugging purposes
 let numOfDigits;
 let numOfRows;
@@ -23,7 +22,7 @@ const container = document.querySelector(`#container`) as HTMLDivElement;
 const theNumbers = document.querySelector(`.theNumbers`) as HTMLDivElement;
 
 
-function generateNum(array){
+function generateNum(array: number[]){
     getSettings();
     let z:any = 1;
     for(let i=1; i<=numOfDigits; i++){
@@ -104,11 +103,12 @@ function changeNumsAndOperatorInDOM(){  //Replace the numbers in the DOM with ne
     };
 
     //Change the operator in the DOM
-    let o = document.getElementById(`operator`).value;
+    let operatorInput = document.getElementById(`operator`) as HTMLInputElement;
+    let o = operatorInput.value;
     if (o == `-- Select --`){
         alert(`-- Select -- is (as of now) NOT an operator.`);
         operator = `+`;
-        document.getElementById(`operator`).value = `Addition(+)`;
+        operatorInput.value = `Addition(+)`;
     }
     else if (o == `Addition(+)`){
         operator = `+`;
@@ -119,13 +119,10 @@ function changeNumsAndOperatorInDOM(){  //Replace the numbers in the DOM with ne
     else if (o ==`Multiplication(x)`){
         operator = `x`;
     }
-    else if (o == `Exponents(n²)`){
-        operator = `^`;
-    }
     else{
         alert(`Division is currently not supported.`);
         operator = `+`;
-        document.getElementById(`operator`).value = `Addition(+)`;
+        operatorInput.value = `Addition(+)`;
     };
     rmXtraNums();
     addXtraNums();

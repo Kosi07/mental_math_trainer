@@ -1,5 +1,4 @@
 //Give better feedback
-//Figure out exponents
 console.log("Mental Math Trainer is running..."); //For debugging purposes
 var numOfDigits;
 var numOfRows;
@@ -104,11 +103,12 @@ function changeNumsAndOperatorInDOM() {
     }
     ;
     //Change the operator in the DOM
-    var o = document.getElementById("operator").value;
+    var operatorInput = document.getElementById("operator");
+    var o = operatorInput.value;
     if (o == "-- Select --") {
         alert("-- Select -- is (as of now) NOT an operator.");
         operator = "+";
-        document.getElementById("operator").value = "Addition(+)";
+        operatorInput.value = "Addition(+)";
     }
     else if (o == "Addition(+)") {
         operator = "+";
@@ -119,13 +119,10 @@ function changeNumsAndOperatorInDOM() {
     else if (o == "Multiplication(x)") {
         operator = "x";
     }
-    else if (o == "Exponents(n\u00B2)") {
-        operator = "^";
-    }
     else {
         alert("Division is currently not supported.");
         operator = "+";
-        document.getElementById("operator").value = "Addition(+)";
+        operatorInput.value = "Addition(+)";
     }
     ;
     rmXtraNums();
