@@ -53,6 +53,7 @@ function acceptUserInput() {
     container.appendChild(line1);
     var textbox = document.createElement("input");
     textbox.id = "answer";
+    textbox.type = "number";
     textbox.className = "text-right";
     container.appendChild(textbox);
     container.appendChild(line2);
