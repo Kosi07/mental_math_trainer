@@ -56,7 +56,8 @@ function acceptUserInput(){
     container.appendChild(line1);
     let textbox = document.createElement(`input`);
     textbox.id = `answer`;
-    textbox.type = `number`;
+    textbox.type = `text`;
+    textbox.inputMode = `numeric`
     textbox.className = `text-right`
     container.appendChild(textbox);
     container.appendChild(line2);
