@@ -2,7 +2,7 @@
 console.log("Mental Math Trainer is running..."); //For debugging purposes
 var numOfDigits;
 var numOfRows;
-var operator = "?";
+var operator = "+";
 var answer;
 var solution;
 var correctness;
@@ -229,7 +229,7 @@ document.getElementById("answer").oninput = function () {
         }
         ;
     }
-    else if (operator == "?") {
+    else {
         alert("Please select an Operator from the dropdown menu.");
     }
     console.log(""); //For debugging purposes
@@ -244,6 +244,9 @@ document.getElementById("answer").oninput = function () {
 };
 document.getElementById("saveChangesBtn").onclick = function () {
     changeNumsAndOperatorInDOM();
+    var settingsSidebar = document.querySelector("#settings-sidebar");
+    settingsSidebar.classList.toggle("translate-x-0");
+    settingsSidebar.classList.toggle("translate-x-full");
     document.getElementById("feedback").textContent = "";
     document.getElementById("timeSpent").textContent = "";
 };

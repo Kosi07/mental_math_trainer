@@ -2,7 +2,7 @@
 console.log(`Mental Math Trainer is running...`); //For debugging purposes
 let numOfDigits;
 let numOfRows;
-let operator = `?`;
+let operator = `+`;
 
 let answer;
 let solution:number;
@@ -228,7 +228,7 @@ document.getElementById(`answer`).oninput = function(){
                 solution *= numArray[i];     //sum up the numbers
             };
         }
-        else if (operator == `?`){
+        else{
             alert(`Please select an Operator from the dropdown menu.`);
         }
         
@@ -246,6 +246,9 @@ document.getElementById(`answer`).oninput = function(){
 
 document.getElementById(`saveChangesBtn`).onclick = function(){
     changeNumsAndOperatorInDOM();
+    let settingsSidebar = document.querySelector(`#settings-sidebar`) as HTMLDivElement;
+    settingsSidebar.classList.toggle(`translate-x-0`);
+    settingsSidebar.classList.toggle(`translate-x-full`);
     document.getElementById(`feedback`).textContent = ``;
     document.getElementById(`timeSpent`).textContent = ``;
 };
