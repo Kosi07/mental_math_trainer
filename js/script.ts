@@ -10,13 +10,9 @@ let correctness:number;
 let position;
 
 let numArray = [];
-let line1 = document.createElement(`hr`);
-let line2 = document.createElement(`hr`);
 
-let startTime;
-let endTime;
-let timeSpent;
-let time;
+let timeInterval;
+let timeArray = [];
 
 const container = document.querySelector(`#container`) as HTMLDivElement;
 const theNumbers = document.querySelector(`.theNumbers`) as HTMLDivElement;
@@ -50,9 +46,14 @@ function writeDivToDOM(){
         }
         theNumbers.appendChild(number);
     };
+    
+    handleTimer();
 };
 
 function acceptUserInput(){
+    let line1 = document.createElement(`hr`);
+    let line2 = document.createElement(`hr`);
+
     container.appendChild(line1);
     let textbox = document.createElement(`input`);
     textbox.id = `answer`;
@@ -85,7 +86,7 @@ function changeNumsAndOperatorInDOM(){  //Replace the numbers in the DOM with ne
     }
     };
 
-    function addXtraNums(){
+    function changeNumsAndAddXtraNumsIfNeeded(){
         for(let i=1; i<=numOfRows; i++){
           if (document.getElementById(`num${i}`) != null){   //If the element with the id exists...
             let numb = document.getElementById(`num${i}`) as HTMLDivElement;
@@ -99,7 +100,7 @@ function changeNumsAndOperatorInDOM(){  //Replace the numbers in the DOM with ne
             let number = document.createElement(`div`);
             number.id = `num${i}`;
             theNumbers.appendChild(number);
-            addXtraNums();                                  //and change textContent
+            changeNumsAndAddXtraNumsIfNeeded();                                  //and change textContent
         };
     };
     };
@@ -126,37 +127,40 @@ function changeNumsAndOperatorInDOM(){  //Replace the numbers in the DOM with ne
         operator = `+`;
         operatorInput.value = `Addition(+)`;
     };
+
+    clearInterval(timeInterval); //stop counting time
+
     rmXtraNums();
-    addXtraNums();
+    changeNumsAndAddXtraNumsIfNeeded();
+
+    handleTimer(); //start counting time again
 };
 
 function giveFeedback(){
-    let feedback = document.getElementById(`feedback`);
-    if (answer === solution){
-        feedback.textContent = `${answer} is correct 🥳✅✅✅`;
-  }
-    else if(answer == ``){
-        feedback.textContent = `Dude WTF? You didn't even write anything.`
-    }
+    let mins = Number(document.getElementById(`minutes`).textContent);
+    let secs = Number(document.getElementById(`seconds`).textContent);
+
+    mins = mins<10? `0`+mins : mins;
+    secs = secs<10? `0`+secs : secs;
+
+    let feedbackRow = document.getElementById(`row1`);
+
+    if(feedbackRow==null){
+        let numbersData = document.createElement(`td`);
+        let operatorData = document.createElement(`td`);
+        let timeData = document.createElement(`td`);
+
+        numbersData.textContent = `${numArray}`;
+        operatorData.textContent = operator;
+        timeData.textContent = `${mins}:${secs}`;
+
+        feedbackRow.appendChild(numbersData);
+        feedbackRow.appendChild(operatorData);
+        feedbackRow.appendChild(timeData);
+    };
     else{
-        correctness = Math.floor((answer/solution)*100)
-        if (answer>solution){
-            position = `high`;
-        }
-        else{   //answer < solution
-            position = `low`;
-        };
-    feedback.textContent = `WRONG❗❗ You were『${correctness}%』close. You guessed too ${position}`;
-  };
-  timeSpent = ((endTime - startTime)/1000);
-  if(timeSpent>=60){
-    timeSpent = timeSpent/60  //convert to minutes.
-    time = `mins.`
-  }
-  else{
-    time = `secs.`
-  };
-  document.getElementById(`timeSpent`).textContent = `🕑️Time spent: ${timeSpent.toFixed(2)} ${time}`;
+        feedbackRow.remove();
+    };
 };
 
 function getSettings(){
@@ -173,14 +177,60 @@ function getSettings(){
     }
 };
 
+function handleTimer(){
+    document.getElementById(`seconds`).textContent = `00`;
+    document.getElementById(`minutes`).textContent = `00`;
+
+    let then = new Date();
+    let thenHr = then.getHours();
+    let thenMin = then.getMinutes();
+    let thenSec = then.getSeconds();
+
+    let thenTotalSec = (thenHr*3600)+(thenMin*60)+(thenSec);
+
+    timeInterval = setInterval(function(){
+        const minutes = document.getElementById(`minutes`);
+        const seconds = document.getElementById(`seconds`);
+
+        let now = new Date();
+        let nowHr = now.getHours();
+        let nowMin = now.getMinutes();
+        let nowSec = now.getSeconds();
+
+        let nowTotalSec = (nowHr*3600)+(nowMin*60)+(nowSec);
+
+        let dTotalSec = nowTotalSec-thenTotalSec;
+
+        let min:any = Math.floor((dTotalSec % 3600)/60);
+        let sec:any = (dTotalSec % 3600)%60;
+
+        min = min<10? `0` + min : min;
+        sec = sec<10? `0` + sec : sec;
+
+        seconds.textContent = sec;
+        minutes.textContent = min;
+    },1000);
+};
+
+//If mins>60, switch to new numbers
+setInterval(function(){
+    let mins = Number(document.getElementById(`minutes`).textContent);
+    let secs = Number(document.getElementById(`seconds`).textContent);
+
+    if(mins === 59 && secs === 59){
+            alert(`You've wasted ${mins} mins and ${secs} secs. Give Up!`);
+            changeNumsAndOperatorInDOM();
+    }
+}, 700);
+
 
 //Program starts here
 document.getElementById(`numOfDigits`).value = 2;
 document.getElementById(`numOfRows`).value = 2;
+document.getElementById(`operator`).value = `Addition(+)`;
 generateNum(numArray);   //Generate random numbers and store in an array
 writeDivToDOM();         //Load random numbers in browser as div
 acceptUserInput();       //Load user input section in browser
-startTime = Date.now();//start measuring time
 
 
 let minDigits = Number(document.getElementById(`numOfDigits`).getAttribute(`min`));
@@ -201,9 +251,9 @@ document.getElementById(`numOfRows`).oninput = function(){
     }
 };
 
-document.getElementById(`answer`).oninput = function(){
+document.getElementById(`answer`).oninput = function(){     //when the user starts typing in an answer
         this.value = this.value.replace(/[^0-9,-]/g, ``);
-        endTime = Date.now();//stop measuring time
+
         if (operator == `+`){
             solution = 0;
             answer = document.getElementById(`answer`).value;
@@ -225,7 +275,7 @@ document.getElementById(`answer`).oninput = function(){
             answer = document.getElementById(`answer`).value;
             answer = Number(answer);
             for (let i=0; i<numOfRows; i++){      
-                solution *= numArray[i];     //sum up the numbers
+                solution *= numArray[i];     //Multiply up the numbers
             };
         }
         else{
@@ -237,11 +287,10 @@ document.getElementById(`answer`).oninput = function(){
         console.log(`ans: ${answer}, soln: ${solution}`); //For debugging purposes
 
         if (answer === solution){
+            //giveFeedback();
             changeNumsAndOperatorInDOM();        //Replace the number on screen with new numbers
             document.getElementById(`answer`).value = ``; //clear input textbox after hitting enter key
-            startTime = Date.now();//start measuring time
         }
-        //giveFeedback();
 };
 
 document.getElementById(`saveChangesBtn`).onclick = function(){
@@ -249,8 +298,6 @@ document.getElementById(`saveChangesBtn`).onclick = function(){
     let settingsSidebar = document.querySelector(`#settings-sidebar`) as HTMLDivElement;
     settingsSidebar.classList.toggle(`translate-x-0`);
     settingsSidebar.classList.toggle(`translate-x-full`);
-    document.getElementById(`feedback`).textContent = ``;
-    document.getElementById(`timeSpent`).textContent = ``;
 };
 
 document.getElementById(`hamburger-icon`).onclick = function(){
@@ -274,5 +321,4 @@ document.getElementById(`settings-icon`).onclick = function(){
         sidebar.classList.toggle(`-translate-x-full`);
     }
 };
-
 
